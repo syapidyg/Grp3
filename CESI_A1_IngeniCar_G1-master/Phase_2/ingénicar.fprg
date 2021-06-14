@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="2.11">
+    <attributes>
+        <attribute name="name" value=""/>
+        <attribute name="authors" value="paulf"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2018-06-11 03:33:41 "/>
+        <attribute name="created" value="cGF1bGY7UEFVTC1QQzsyMDE4LTA2LTExOyIxMToxNjoyNyAiOzIyMjY="/>
+        <attribute name="edited" value="cGF1bGY7UEFVTC1QQzsyMDE4LTA2LTExOyIwMzozMzo0MSAiOzY7MjMzNQ=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="rsensor1" type="Boolean" array="False" size=""/>
+            <comment text="Capteur gauche"/>
+            <declare name="rsensor2" type="Boolean" array="False" size=""/>
+            <comment text="Capteur milieu"/>
+            <declare name="rsensor3" type="Boolean" array="False" size=""/>
+            <comment text="Capteur droite"/>
+            <declare name="engine1" type="Boolean" array="False" size=""/>
+            <comment text="Moteur haut gauche"/>
+            <declare name="engine2" type="Boolean" array="False" size=""/>
+            <comment text="Moteur haut droite"/>
+            <declare name="engine3" type="Boolean" array="False" size=""/>
+            <comment text="Moteur bas gauche"/>
+            <declare name="engine4" type="Boolean" array="False" size=""/>
+            <comment text="Moteur bas droite"/>
+            <while expression="engine3 &amp;&amp; engine4 = 1">
+                <output expression="&quot;Valeur capteur gauche&quot;" newline="True"/>
+                <input variable="rsensor1"/>
+                <if expression="rsensor1 = true">
+                    <then>
+                        <output expression="&quot;Hors route !&quot;" newline="True"/>
+                    </then>
+                    <else>
+                        <output expression="&quot;Valeur capteur droite&quot;" newline="True"/>
+                        <input variable="rsensor4"/>
+                        <if expression="rsensor4 = true">
+                            <then>
+                                <output expression="&quot;Hors route !&quot;" newline="True"/>
+                            </then>
+                            <else>
+                                <output expression="&quot;Valeur capteur milieu gauche&quot;" newline="True"/>
+                                <input variable="rsensor2"/>
+                                <output expression="&quot;Valeur capteur milieu droite&quot;" newline="True"/>
+                                <input variable="rsensor3"/>
+                                <if expression="rsensor2= true">
+                                    <then>
+                                        <assign variable="engine3" expression="false"/>
+                                        <assign variable="engine4" expression="false"/>
+                                        <output expression="&quot;Tourner &#224; gauche&quot;" newline="True"/>
+                                        <assign variable="engine1" expression="true"/>
+                                        <output expression="&quot;D&#233;lai de 3 secondes&quot;" newline="True"/>
+                                        <comment text="Delay (3000)"/>
+                                        <assign variable="engine1" expression="false"/>
+                                    </then>
+                                    <else>
+                                        <output expression="&quot;Avancer&quot;" newline="True"/>
+                                        <assign variable="engine3" expression="true"/>
+                                        <assign variable="engine4" expression="true"/>
+                                    </else>
+                                </if>
+                                <if expression="rsensor3 = true">
+                                    <then>
+                                        <assign variable="engine3" expression="false"/>
+                                        <assign variable="engine4" expression="false"/>
+                                        <output expression="&quot;Tourner &#224; droite&quot;" newline="True"/>
+                                        <assign variable="engine2" expression="true"/>
+                                        <output expression="&quot;D&#233;lai de 3 secondes&quot;" newline="True"/>
+                                        <comment text="Delay (3000)"/>
+                                        <assign variable="engine2" expression="false"/>
+                                    </then>
+                                    <else>
+                                        <output expression="&quot;Avancer&quot;" newline="True"/>
+                                        <assign variable="engine3" expression="true"/>
+                                        <assign variable="engine4" expression="true"/>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </while>
+            <output expression="&quot;Arr&#234;t du v&#233;hicule&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>
