@@ -1,5 +1,5 @@
 #include <VirtualWire.h>
-int receive_pin = 10 ; //initialisation du pin de l'emetteur
+int receive_pin = 11 ; //initialisation du pin de l'emetteur
 void setup(){
   Serial.begin(9600);
   vw_setup(2000);  //initialisation de la bibliothèque VirtualWire à 2000 bauds
@@ -12,6 +12,9 @@ void setup(){
  
 }
 void loop(){
+  receiver();
+}
+void receiver(){
   byte message[VW_MAX_MESSAGE_LEN];
   byte taille_message = VW_MAX_MESSAGE_LEN;
   // N.B. La constante VW_MAX_MESSAGE_LEN est fournie par la lib VirtualWire
@@ -25,14 +28,14 @@ void loop(){
   // On attend de recevoir un message
   vw_wait_rx();
 
-  if(vw_get_message(message,&taille_message){
+  if(vw_get_message(message,&taille_message)){
     // On copie le message, qu'il soit corrompu ou non
     int i;
         // Message avec contrôle reçu en lettre
         Serial.print("ACAR3: "); // Permet d'afficher "ACAR" devant le message reçu
         for(i = 0; i < message; ++i)
         {
-          Serial.write(mess[i]);// On reçois le message en lettre
+          Serial.write(message[i]);// On reçois le message en lettre
           Serial.print(" ");
  
         }

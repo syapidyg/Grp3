@@ -1,5 +1,6 @@
 //Bibliotheque pour piloter les moteurs I2C
 #include "Grove_I2C_Motor_Driver.h"
+#include <VirtualWire.h>
 // adresse materiel par defaut de la commande
 #define I2C_Adress 0x0f
 /*-------définir les constantes------*/
@@ -11,17 +12,17 @@ int L = 3; //Left sensor
 int RS;
 int MS;
 int LS;
-int pin=11  //Definition du pin
+int pin=12; //Definition du pin
+
 void setup() {
   // put your setup code here, to run once:
  Serial.begin(9600); // initialisation du moniteur de serie a 9600 bauds
-Motor.begin(I2C_Adress);
+  vw_setup(2000);       //initialisation de la bibliothèque VirtualWire à 2000 bauds
+   vw_set_tx_pin(pin);   // intialisation du pin de la bibliotheque VirtualWire
+  Motor.begin(I2C_Adress);
   pinMode(RS, INPUT);
   pinMode(MS, INPUT);   //activation des ports
   pinMode(LS, INPUT);
-  
-  vw_setup(2000);       //initialisation de la bibliothèque VirtualWire à 2000 bauds
-  
   vw_set_tx_pin(pin);   // intialisation du pin de la bibliotheque VirtualWire
   
   Serial.println("Go !");  // affichage du message 'Go' pour le debut de la transmission
@@ -30,8 +31,14 @@ Motor.begin(I2C_Adress);
 void loop() {
   // put your main code here, to run repeatedly:
 
+transmitter();
+movement();
 
-/* ------le Code d'envoie des informations a l'aide de la bibliotheque VirtualWire fait trois choses
+
+  }
+  
+void transmitter(){
+    /* ------le Code d'envoie des informations a l'aide de la bibliotheque VirtualWire fait trois choses
 *le code attend que l'utilisateur finisse de saisir une chaine de caractères dans le moniteur série.
 
 N.B. La chaine de caractères est lue en mode octets, il est donc nécessaire de fermer cette chaine de caractère par un caractère vide '\0' en fin de chaine.
@@ -40,7 +47,7 @@ N.B. La chaine de caractères est lue en mode octets, il est donc nécessaire de
 
 *Pour finir, le code attend que la transmission se termine. [/ul]-----*/
 
-const char* message="Maiva est gentille";
+//const char *message="Maiva est gentille";
 byte message[VW_MAX_MESSAGE_LEN];
   byte taille_message = VW_MAX_MESSAGE_LEN;
   // N.B. La constante VW_MAX_MESSAGE_LEN est fournie par la lib VirtualWire
@@ -55,8 +62,9 @@ byte message[VW_MAX_MESSAGE_LEN];
     vw_send(message,len+1);   // On envoie le message 
     vw_wait_tx();         // On attend la fin de l'envoi
  
-
-RS = digitalRead(R);
+  }
+  void movement(){
+    RS = digitalRead(R);
 MS = digitalRead(M);
 LS = digitalRead(L);
 
@@ -116,5 +124,4 @@ LS = digitalRead(L);
       Motor.speed(MOTOR2,-35);
     }
   }
-}
- 
+ }
