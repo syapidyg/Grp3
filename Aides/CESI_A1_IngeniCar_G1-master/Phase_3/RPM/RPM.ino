@@ -1,41 +1,37 @@
-#include "TimerOne.h"
-unsigned int counter=0;
+#include <FreqCounter.h>  //Inclure la librairie de fréquence
 
-int b1a = 6;  // L9110 B-1A 
-int b1b = 9;  // L9110 B-1B   
+// Variables utilisées
+unsigned long frq;    //fréquence mesurée
+int cnt;              //nombre de mesures réalisées
+int encoches=2;  //16;       //nombre d encoches de la roue codeuse (1 ou plus)
+float trmin;  //vitesse de rotation en tour/min
 
-void docount()  // counts from the speed sensor
-{
-  counter++;  // increase +1 the counter value
-} 
-
-void timerIsr()
-{
-  Timer1.detachInterrupt();  //stop the timer
-  Serial.print("Motor Speed: "); 
-  int rotation = (counter / 20);  // divide by number of holes in Disc
-  Serial.print(rotation,DEC);  
-  Serial.println(" Rotations par seconde"); 
-  counter=0;  //  reset counter to zero
-  Timer1.attachInterrupt( timerIsr );  //enable the timer
+// Initialisation
+void setup() {
+  Serial.begin(9600);   //connection au port série
+  Serial.println("Frequencemetre");
 }
 
-void setup() 
-{
-  Serial.begin(2000);
-  
- pinMode(b1a, OUTPUT); 
- pinMode(b1b, OUTPUT); 
-  
-  Timer1.initialize(1000000); // set timer for 1sec
-  attachInterrupt(0, docount, RISING);  // increase counter when speed sensor pin goes High
-  Timer1.attachInterrupt( timerIsr ); // enable the timer
-} 
+// === Boucle de mesures
+void loop() {
+  // Attendre le signal
+  //compensation (étalonnage)
+  FreqCounter::f_comp=10;   // Cal Value / Calibrate with professional Freq Counter
 
-void loop()
-{
-  int potvalue = analogRead(1);  // Potentiometer connected to Pin A1
-  int motorspeed = map(potvalue, 0, 680, 255, 0);
-  analogWrite(b1a, motorspeed);  // set speed of motor (0-255)
-  digitalWrite(b1b, 1);  // set rotation of motor to Clockwise
-}
+  // 10, 100 ou 1000 ms pour une résolution de 100, 10 et 1 Hz 
+  FreqCounter::start(100);  // 100 ms Gate Time
+
+  // Attendre jusqu'à avoir un comptage terminé
+  while (FreqCounter::f_ready == 0)
+ 
+ // Afficher la mesure de fréquence (et de rotation)
+  frq=FreqCounter::f_freq;
+  Serial.print(cnt++);
+  Serial.print("  Freq (Hz): ");
+  Serial.print(frq);
+ 
+  trmin = frq/encoches*60;  //Vitesse de rotation en tour/min
+  Serial.print("  tour/min: ");
+  Serial.println(trmin);
+  delay(600);
+} 
