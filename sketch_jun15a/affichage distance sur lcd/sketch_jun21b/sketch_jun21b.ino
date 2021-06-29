@@ -79,7 +79,7 @@ void setup()
   // Robojax code for LCD with I2C
 }
 
-void loop.()
+void loop()
 {
     
   //start of loop Robojax code for LCD with I2C

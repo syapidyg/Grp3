@@ -48,8 +48,8 @@ N.B. La chaine de caractères est lue en mode octets, il est donc nécessaire de
 *Pour finir, le code attend que la transmission se termine. [/ul]-----*/
 
 //const char *message="Maiva est gentille";
-byte message[VW_MAX_MESSAGE_LEN];
-  byte taille_message = VW_MAX_MESSAGE_LEN;
+byte message[27];
+  byte taille_message = 27;
   // N.B. La constante VW_MAX_MESSAGE_LEN est fournie par la lib VirtualWire
   
  // Lit un message de maximum 76 caractères depuis le port série
